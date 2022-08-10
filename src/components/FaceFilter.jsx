@@ -12,10 +12,14 @@ import imagesEarLeft from '@/images/ear-left.png' // 182x295
 import imagesEarRight from '@/images/ear-right.png' // 182x295
 import imagesLamp from '@/images/lamp.png' // 179x242
 import imagesMegaphone from '@/images/megaphone.png' // 398x241
-import imagesSpiderman from '@/images/spiderman.png'
+import imagesSpiderman from '@/images/spiderman.png' // 385x500
+import imageOption1 from '@/images/option1.png' // 761x674
+import imageOption2 from '@/images/option2.png' // 780x421
+import imageOption3 from '@/images/option3.png'// 786x679
 
 function FaceFilter() {
   // Is Ready for P5, Dimensions of Camera, Permission Error
+  const [isCanvasReady, setIsCanvasReady] = useState(false)
   const [isCameraReady, setIsCameraReady] = useState(false)
   const [permissionError, setPermissionError] = useState('')
   const [aspectRatio, setAspectRatio] = useState(0)
@@ -52,6 +56,7 @@ function FaceFilter() {
         w: canvasContainer.clientWidth,
         h: canvasContainer.clientWidth / aspectRatio
       })
+      setIsCanvasReady(true)
     }
   }, [canvasContainer])
 
@@ -81,7 +86,7 @@ function FaceFilter() {
       const imageWidth = imageHeight * (231 / 563)
 
       // translate origin to top(-100%) left(-12.5%) of image
-      // draw horn in the middle of face and a little higher than brows | 0.9 to move up a little
+      // draw horn image in the middle of face and a little higher than brows | 0.95 to move up a little
       p5.push()
       p5.translate(-imageWidth / 2.5, -imageHeight)
       p5.image(images.horn, positions[41][0], Math.max(positions[16][1], positions[20][1]) * 0.95, imageWidth, imageHeight)
@@ -161,6 +166,60 @@ function FaceFilter() {
     }
   }
 
+  const drawOption1 = (p5) => {
+    const positions = tracker.getCurrentPosition()
+
+    if (positions !== false) {
+      // height = ((chin's y) - (highest of brow's y)) * 2 | 2 to make up for image size
+      // width = height * (original image width / original image height)
+      const imageHeight = Math.abs(positions[7][1] - Math.max(positions[16][1], positions[20][1])) * 2
+      const imageWidth = imageHeight * (761 / 674)
+
+      // translate origin to top(-47%) left(-48%) of image
+      // draw option1 image between eyes
+      p5.push()
+      p5.translate(-imageWidth * 0.47, -imageHeight * 0.47)
+      p5.image(images.option1, positions[41][0], Math.max(positions[25][1], positions[30][1]), imageWidth, imageHeight)
+      p5.pop()
+    }
+  }
+
+  const drawOption2 = (p5) => {
+    const positions = tracker.getCurrentPosition()
+
+    if (positions !== false) {
+      // height = ((chin's y) - (highest of brow's y)) * 2 | 1.2 to make up for image size
+      // width = height * (original image width / original image height)
+      const imageHeight = Math.abs(positions[7][1] - Math.max(positions[16][1], positions[20][1])) * 1.2
+      const imageWidth = imageHeight * (780 / 421)
+
+      // translate origin to top(-50%) left(-47%) of image
+      // draw option2 image in the middle of face and a little higher than brows | 0.95 to move up a little
+      p5.push()
+      p5.translate(-imageWidth * 0.47, -imageHeight * 0.50)
+      p5.image(images.option2, positions[41][0], Math.max(positions[16][1], positions[20][1]) * 0.9, imageWidth, imageHeight)
+      p5.pop()
+    }
+  }
+
+  const drawOption3 = (p5) => {
+    const positions = tracker.getCurrentPosition()
+
+    if (positions !== false) {
+      // height = ((chin's y) - (highest of brow's y)) * 2 | 2 to make up for image size
+      // width = height * (original image width / original image height)
+      const imageHeight = Math.abs(positions[7][1] - Math.max(positions[16][1], positions[20][1])) * 2
+      const imageWidth = imageHeight * (786 / 679)
+
+      // translate origin to top(-49%) left(-47%) of image
+      // draw option3 image between eyes
+      p5.push()
+      p5.translate(-imageWidth * 0.49, -imageHeight * 0.47)
+      p5.image(images.option3, positions[41][0], Math.max(positions[25][1], positions[30][1]), imageWidth, imageHeight)
+      p5.pop()
+    }
+  }
+
   const preload = (p5) => {
     const imageObjs = [
       { key: 'spiderman', image: p5.loadImage(imagesSpiderman) },
@@ -169,7 +228,10 @@ function FaceFilter() {
       { key: 'earLeft', image: p5.loadImage(imagesEarLeft) },
       { key: 'earRight', image: p5.loadImage(imagesEarRight) },
       { key: 'lamp', image: p5.loadImage(imagesLamp) },
-      { key: 'megaphone', image: p5.loadImage(imagesMegaphone) }
+      { key: 'megaphone', image: p5.loadImage(imagesMegaphone) },
+      { key: 'option1', image: p5.loadImage(imageOption1) },
+      { key: 'option2', image: p5.loadImage(imageOption2) },
+      { key: 'option3', image: p5.loadImage(imageOption3) }
     ]
 
     setImages(produce(images, (draft) => {
@@ -219,6 +281,18 @@ function FaceFilter() {
         drawHat(p5, tracker)
         break
       }
+      case 'option1': {
+        drawOption1(p5, tracker)
+        break
+      }
+      case 'option2': {
+        drawOption2(p5, tracker)
+        break
+      }
+      case 'option3': {
+        drawOption3(p5, tracker)
+        break
+      }
       default: {
         break
       }
@@ -251,9 +325,14 @@ function FaceFilter() {
         <option value="horn">Horn</option>
         <option value="megaphone-lamp">Megaphone Lamp</option>
         <option value="hat">Hat</option>
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+        <option value="option3">Option 3</option>
       </select>
 
-      <div className="canvas-container m-auto" ref={(elem) => elem && setCanvasContainer(elem)} style={{ maxWidth: '500px' }} />
+      <div className={isCanvasReady ? 'd-flex justify-content-center mx-auto overflow-hidden' : ''} style={isCanvasReady ? { width: '320px' } : {}}>
+        <div className="canvas-container" ref={(elem) => elem && setCanvasContainer(elem)} style={{ width: '500px' }} />
+      </div>
 
       {
         canvasContainer ? (
