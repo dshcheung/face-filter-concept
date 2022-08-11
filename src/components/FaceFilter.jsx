@@ -13,9 +13,9 @@ import imagesEarRight from '@/images/ear-right.png' // 182x295
 import imagesLamp from '@/images/lamp.png' // 179x242
 import imagesMegaphone from '@/images/megaphone.png' // 398x241
 import imagesSpiderman from '@/images/spiderman.png' // 385x500
-import imageOption1 from '@/images/option1.png' // 761x674
-import imageOption2 from '@/images/option2.png' // 780x421
-import imageOption3 from '@/images/option3.png'// 786x679
+import imageOption1 from '@/images/option1.png' // 748x638
+import imageOption2 from '@/images/option2.png' // 771x397
+import imageOption3 from '@/images/option3.png'// 786x658
 
 function FaceFilter() {
   // Is Ready for P5, Dimensions of Camera, Permission Error
@@ -173,7 +173,7 @@ function FaceFilter() {
       // height = ((chin's y) - (highest of brow's y)) * 2 | 2 to make up for image size
       // width = height * (original image width / original image height)
       const imageHeight = Math.abs(positions[7][1] - Math.max(positions[16][1], positions[20][1])) * 2
-      const imageWidth = imageHeight * (761 / 674)
+      const imageWidth = imageHeight * (748 / 638)
 
       // translate origin to top(-47%) left(-48%) of image
       // draw option1 image between eyes
@@ -191,7 +191,7 @@ function FaceFilter() {
       // height = ((chin's y) - (highest of brow's y)) * 2 | 1.2 to make up for image size
       // width = height * (original image width / original image height)
       const imageHeight = Math.abs(positions[7][1] - Math.max(positions[16][1], positions[20][1])) * 1.2
-      const imageWidth = imageHeight * (780 / 421)
+      const imageWidth = imageHeight * (771 / 397)
 
       // translate origin to top(-50%) left(-47%) of image
       // draw option2 image in the middle of face and a little higher than brows | 0.95 to move up a little
@@ -209,7 +209,7 @@ function FaceFilter() {
       // height = ((chin's y) - (highest of brow's y)) * 2 | 2 to make up for image size
       // width = height * (original image width / original image height)
       const imageHeight = Math.abs(positions[7][1] - Math.max(positions[16][1], positions[20][1])) * 2
-      const imageWidth = imageHeight * (786 / 679)
+      const imageWidth = imageHeight * (786 / 658)
 
       // translate origin to top(-49%) left(-47%) of image
       // draw option3 image between eyes
